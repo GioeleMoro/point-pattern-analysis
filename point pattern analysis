@@ -1,0 +1,38 @@
+#install spatstat pakages
+
+install.packages ("spatstat")
+library(spatstat)
+
+######### IMPORT DATA FROM AN EXTERNAL SOURCE
+ 
+# setwd("path/lab")
+ 
+# setwd for Windows
+# setwd("C:/lab/")
+ 
+# setwd Mac
+# setwd("/Users/yourname/lab/")
+ 
+# Linux
+setwd("~/lab/")
+covid <- read.table("covid_agg.csv", header=TRUE)
+covid
+
+#now, let'see the density of the covid data
+#let's make a planar point pattern in spatstat
+attach(covid)
+names(covid)
+#ppp(x, y and ranges) ranges have to be a little bit bigger than the actual range che puoi vedere con summary(covid)
+covid_planar <- ppp(lon, lat, c(-180, 180), c(-90,90))
+
+density_map <- density(covid_planar)
+plot(density_map)
+#to show the points in the plote use points(nome ppp)
+points(covid_planar)
+#to change colors create a colorRampPalette and name it, then recall it on plot function
+cl<- colorRampPalette(c('yellow','orange','red'))(100)
+plot(density_map, col=cl)
+
+#putting the countries ontop of the map, usin an additional package rgdal
+install.packages("rgdal")
+
